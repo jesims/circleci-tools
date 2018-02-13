@@ -44,4 +44,3 @@ else
     echo "Future builds found. Halting"
     exit 1
 fi
-

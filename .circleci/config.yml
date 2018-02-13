@@ -7,7 +7,7 @@ aliases:
      - image: jesiio/docker-git-awscli:latest
 
 jobs:
-  sleep_1:
+  test:
     docker: *DEFAULT
     steps:
       - checkout
@@ -20,6 +20,6 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  build:
     jobs:
-      - sleep_1
+      - test

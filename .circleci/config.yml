@@ -1,14 +1,9 @@
 version: 2
 
-aliases:
-  containers:
-    docker: &DEFAULT
-      - image: jesiio/jesi:0.3
-     - image: jesiio/docker-git-awscli:latest
-
 jobs:
   build:
-    docker: *DEFAULT
+    docker:
+      - image: jesiio/docker-git-awscli:latest
     steps:
       - checkout
       - run: './cancel-redundant-builds.sh'
@@ -20,6 +15,6 @@ jobs:
 
 workflows:
   version: 2
-  build_test:
+  build_and_test:
     jobs:
       - build

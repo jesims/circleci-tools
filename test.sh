@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 export CIRCLECI=""
+export PROJECT_VCS_TYPE="github"
+
 function test_should_abort(){
     export CIRCLE_BUILD_NUM="8647"
     ./cancel-redundant-builds.sh

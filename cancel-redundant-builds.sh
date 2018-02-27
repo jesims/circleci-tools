@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+PROJECT_VCS_TYPE=${PROJECT_VCS_TYPE:-'github'}
 if [[ -n "$CIRCLECI" ]];then
-	BASE_API_URL="https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH"
+	BASE_API_URL="https://circleci.com/api/v1.1/project/$PROJECT_VCS_TYPE/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH"
 else
 	BASE_API_URL="file"
 	CIRCLE_TOKEN="UNDEFINED"

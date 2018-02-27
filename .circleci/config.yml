@@ -1,0 +1,26 @@
+version: 2
+
+jobs:
+  manual_test_builds:
+    docker:
+      - image: jesiio/docker-git-awscli:latest
+    steps:
+      - checkout
+      - run: './cancel-redundant-builds.sh'
+      - run: 'sleep 1m'
+      - run: './cancel-redundant-builds.sh'
+      - run: 'sleep 1m'
+      - run: './cancel-redundant-builds.sh'
+      - run: 'sleep 1m'
+  test:
+    docker:
+      - image: jesiio/docker-git-awscli:latest
+    steps:
+      - checkout
+      - run: './test.sh'
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test

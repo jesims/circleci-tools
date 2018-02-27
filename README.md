@@ -10,7 +10,7 @@ A collection of CircleCI tools to optimise build times and workflows
 ## Usage
 
 1. Add CIRCLE_TOKEN environment variable to your project
-2. Add `wget` and script execution when you wish to check for newer builds
+2. Add `wget` or `curl` and script execution when you wish to check for newer builds
 
 ### Example CircleCI config
 
@@ -20,7 +20,7 @@ jobs:
     docker:
       - image: jesiio/docker-git-awscli:latest
     steps:
-      - run: 'wget -O - https://raw.githubusercontent.com/jesims/circleci-tools/master/cancel-redundant-builds.sh | bash'
+      - run: 'curl -sSk https://raw.githubusercontent.com/jesims/circleci-tools/master/cancel-redundant-builds.sh | bash'
       - checkout
       - run: './test.sh'
 

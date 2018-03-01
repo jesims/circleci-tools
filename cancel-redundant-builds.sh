@@ -31,7 +31,7 @@ circle_get () {
     else
         curl --silent \
             -H "Content-Type: application/json" \
-            ${BASE_API_URL}
+            "${BASE_API_URL}?circle-token=${CIRCLE_TOKEN}"
     fi
 }
 

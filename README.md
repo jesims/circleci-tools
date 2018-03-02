@@ -4,8 +4,8 @@ A collection of CircleCI tools to optimise build times and workflows
 ## Requirements
 - bash
 - jq
-- wget
-- curl
+- nodejs (becuase CircleCI date values are not all UTC... Some have offsets)
+- wget or curl
 
 ## Usage
 

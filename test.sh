@@ -4,7 +4,7 @@ export CIRCLECI=""
 export PROJECT_VCS_TYPE="github"
 
 function test_should_abort(){
-    export CIRCLE_BUILD_NUM="8647"
+    export CIRCLE_BUILD_NUM="9305"
     ./cancel-redundant-builds.sh
     status=$?
     if [[ ${status} == 0 ]];then
@@ -14,7 +14,7 @@ function test_should_abort(){
 }
 
 function test_should_pass(){
-    export CIRCLE_BUILD_NUM="8720"
+    export CIRCLE_BUILD_NUM="9311"
     ./cancel-redundant-builds.sh
     status=$?
     if [[ ${status} != 0 ]];then

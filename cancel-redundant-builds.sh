@@ -24,9 +24,19 @@ require_var () {
     fi
 }
 
+date () {
+    unamestr=`uname`
+    if [[ "$unamestr" == 'Darwin' ]];then
+        gdate -d $1
+    else
+        date -d $1
+    fi
+}
+
+
 circle_get () {
 	require_var CIRCLE_TOKEN
-	if [[ "$BASE_API_URL" == "file" ]]; then
+	if [[ "$BASE_API_URL" == "file" ]];then
 	    cat test.json
     else
         curl --silent \
@@ -43,11 +53,15 @@ current_workflow_id=$(echo ${current_build} | jq --raw-output ".workflows.workfl
 require_var current_workflow_id
 current_author_date=$(echo ${current_build} | jq --raw-output ".author_date")
 require_var current_author_date
-matches=$(echo ${v} | jq --raw-output ".[] | select((.workflows.workflow_id!=\"$current_workflow_id\") and (.author_date > \"$current_author_date\")) | .workflows.job_id")
+matches=$(echo ${v} | jq --raw-output ".[] | select(.workflows.workflow_id!=\"$current_workflow_id\") | .author_date")
 
-if [[ -z "$matches" ]];then
-    echo "No future builds found. Progressing"
-else
-    echo "Future builds found. Halting"
-    exit 1
-fi
+current_author_date=$(date ${current_author_date})
+
+for d in $matches;do
+    d=$(date ${matches[$i]})
+    if [[ ${d} > ${current_author_date} ]]; then
+        echo "Newer builds found ${d} > ${current_author_date}"
+        exit 1
+    fi
+done
+

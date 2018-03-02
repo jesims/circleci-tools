@@ -3,7 +3,7 @@ version: 2
 jobs:
   manual_test_builds:
     docker:
-      - image: jesiio/docker-git-awscli:latest
+      - image: jesiio/build-bus:latest
     steps:
       - checkout
       - run: './cancel-redundant-builds.sh'

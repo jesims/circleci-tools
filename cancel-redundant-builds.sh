@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_VCS_TYPE=${PROJECT_VCS_TYPE:-'github'}
 if [[ -n "$CIRCLECI" ]];then
 	BASE_API_URL="https://circleci.com/api/v1.1/project/$PROJECT_VCS_TYPE/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH"
@@ -44,7 +44,7 @@ require_var current_workflow_id
 current_author_date=$(echo ${current_build} | jq --raw-output ".author_date")
 require_var current_author_date
 matches=$(echo ${v} | jq --raw-output ".[] | select(.workflows.workflow_id!=\"$current_workflow_id\") | .author_date")
-current_author_date=$(node toDate.js ${current_author_date})
+current_author_date=$(node "$dir/toDate.js" ${current_author_date})
 
 for d in $matches;do
     d=$(node toDate.js ${d})

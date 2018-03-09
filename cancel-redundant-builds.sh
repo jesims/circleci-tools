@@ -47,7 +47,7 @@ matches=$(echo ${v} | jq --raw-output ".[] | select(.workflows.workflow_id!=\"$c
 current_author_date=$(node "$dir/toDate.js" ${current_author_date})
 
 for d in $matches;do
-    d=$(node toDate.js ${d})
+    d=$(node "$dir/toDate.js" ${d})
     if [[ ${d} > ${current_author_date} ]]; then
         echo "Newer builds found ${d} > ${current_author_date}"
         exit 1

@@ -23,5 +23,16 @@ function test_should_pass(){
     fi
 }
 
+function test_should_skip(){
+    export CIRCLE_BUILD_NUM="9312"
+    ./cancel-redundant-builds.sh
+    status=$?
+    if [[ ${status} != 0 ]];then
+        echo "Test failed"
+        exit 1
+    fi
+}
+
 test_should_abort && \
-test_should_pass
+test_should_pass && \
+test_should_skip

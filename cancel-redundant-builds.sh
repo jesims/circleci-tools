@@ -46,11 +46,13 @@ require_var current_author_date
 matches=$(echo ${v} | jq --raw-output ".[] | select(.workflows.workflow_id!=\"$current_workflow_id\") | .author_date")
 current_author_date=$(node "$dir/toDate.js" ${current_author_date})
 
-for d in $matches;do
-    d=$(node "$dir/toDate.js" ${d})
-    if [[ ${d} > ${current_author_date} ]]; then
-        echo "Newer builds found ${d} > ${current_author_date}"
-        exit 1
-    fi
-done
+if [ -n "$current_author_date" ]; then
+	for d in $matches;do
+	    d=$(node "$dir/toDate.js" ${d})
+	    if [[ ${d} > ${current_author_date} ]]; then
+		echo "Newer builds found ${d} > ${current_author_date}"
+		exit 1
+	    fi
+	done
+fi
 

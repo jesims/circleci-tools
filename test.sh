@@ -49,6 +49,7 @@ test_empty(){
 }
 
 -lint &&
+echo-message 'Running tests' && \
 test_should_abort && \
 test_should_pass && \
 test_should_skip && \

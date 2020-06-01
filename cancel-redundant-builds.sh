@@ -32,7 +32,7 @@ else
 fi
 
 circle-get () {
-	if [[ "$BASE_API_URL" != 'https://circleci.com/*' ]];then
+	if [[ "$BASE_API_URL" != https://circleci.com/* ]];then
 		cat "$BASE_API_URL.json"
 	else
 		require-var CIRCLE_TOKEN

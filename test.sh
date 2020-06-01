@@ -8,32 +8,35 @@ fi
 export CIRCLECI=''
 
 assert-not-failed(){
-	if [[ $? != 0 ]];then
+	if [ $? != 0 ];then
 		echo "Test failed"
 		exit 1
 	fi
 }
 
 assert-failed(){
-	if [[ $? == 0 ]];then
+	if [ $? == 0 ];then
 		echo "Test failed"
 		exit 1
 	fi
 }
 
 test_should_abort(){
-		export CIRCLE_BUILD_NUM='9305'
-		./cancel-redundant-builds.sh
-		assert-failed
+	export BASE_API_URL='test'
+	export CIRCLE_BUILD_NUM='9305'
+	./cancel-redundant-builds.sh
+	assert-failed
 }
 
 test_should_pass(){
+	export BASE_API_URL='test'
 	export CIRCLE_BUILD_NUM='9311'
 	./cancel-redundant-builds.sh
 	assert-not-failed
 }
 
 test_should_skip(){
+	export BASE_API_URL='test'
 	export CIRCLE_BUILD_NUM='9312'
 	./cancel-redundant-builds.sh
 	assert-not-failed

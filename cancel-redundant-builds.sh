@@ -1,11 +1,4 @@
 #!/usr/bin/env bash
-PROJECT_VCS_TYPE=${PROJECT_VCS_TYPE:-'github'}
-if [ -n "$CIRCLECI" ];then
-	BASE_API_URL="https://circleci.com/api/v1.1/project/$PROJECT_VCS_TYPE/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH"
-else
-	BASE_API_URL="${BASE_API_URL:-file}"
-	CIRCLE_TOKEN="UNDEFINED"
-fi
 
 echo-error () {
 	echo "ERROR: $*"
@@ -18,17 +11,29 @@ var-set () {
 }
 
 require-var () {
-	if ! var-set "$1";then
-		echo-error "$1 not defined"
-		exit 1
-	fi
+	local var
+	for var in "$@";do
+		if ! var-set "$var";then
+			echo-error "$var not defined"
+			exit 1
+		fi
+	done
 }
 
+require-var CIRCLE_BUILD_NUM
+
+if [ -n "$CIRCLECI" ];then
+	PROJECT_VCS_TYPE=${PROJECT_VCS_TYPE:-'github'}
+	require-var PROJECT_VCS_TYPE CIRCLE_PROJECT_USERNAME CIRCLE_PROJECT_REPONAME CIRCLE_BRANCH
+	BASE_API_URL="https://circleci.com/api/v1.1/project/$PROJECT_VCS_TYPE/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH"
+else
+	require-var BASE_API_URL
+	CIRCLE_TOKEN=''
+fi
+
 circle-get () {
-	if [ "$BASE_API_URL" = 'file' ];then
-		cat test.json
-	elif [ "$BASE_API_URL" = 'empty' ];then
-		cat empty.json
+	if [[ "$BASE_API_URL" != 'https://circleci.com/*' ]];then
+		cat "$BASE_API_URL.json"
 	else
 		require-var CIRCLE_TOKEN
 		curl --silent \

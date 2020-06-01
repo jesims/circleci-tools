@@ -20,6 +20,13 @@ require-var () {
 	done
 }
 
+abort-on-error () {
+	if [ $? -ne 0 ]; then
+		echo-error "$@"
+		exit 1
+	fi
+}
+
 require-var CIRCLE_BUILD_NUM
 
 if [ -n "$CIRCLECI" ];then
@@ -50,12 +57,18 @@ node-date() {
 }
 
 v=$(circle-get)
+abort-on-error "getting builds from CircleCI: $v"
 require-var v
 if [ "$(echo "$v" | jq)" == '[]' ];then
-	#no previous builds found
+	echo 'No builds found. Got empty response from CircleCI'
 	exit 0
 fi
 current_build=$(echo "$v" | jq --raw-output ".[] | select(.build_num==$CIRCLE_BUILD_NUM)")
+abort-on-error "finding current build: $current_build"
+if [ -z "$current_build" ];then
+	echo 'Could not find current build'
+	exit 0
+fi
 require-var current_build
 current_workflow_id=$(echo "${current_build}" | jq --raw-output ".workflows.workflow_id")
 require-var current_workflow_id

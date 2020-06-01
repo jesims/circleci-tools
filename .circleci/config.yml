@@ -17,6 +17,9 @@ jobs:
       - image: jesiio/build-bus:latest
     steps:
       - checkout
+      - run:
+          name: Git Submodule Update
+          command: git submodule sync && git submodule update --init --recursive
       - run: './test.sh'
 
 workflows:
